@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="shell, bash, Linux, 程序设计">
+        <meta name="description" content="Shell 程序设计教程">
+        <meta name="author" content="Huoty">
+        <title>Shell 变量 | Shell 程序设计教程</title>
+        <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+
+        <!-- 实现 Github 风格的语法高亮 -->
+        <link href="css/github.min.css" rel="stylesheet"/>
+        <script src="js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <script src="js/MathJax.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+        </script>
+    </head>
+ <body>
+  <!-- 页面头部 -->
+  <div class="header"> 
+    <h1 id="shell">Shell 程序设计教程</h1>
+  </div>
+  <div class="topnav">
+    <p>
+        «&#160;&#160;<a href="chapter1.html">Shell 概述</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter3.html">Shell 中的特殊字符</a>&#160;&#160;»
+    </p>
+  </div>
+  
+  <!-- 页面主体 -->
+  <div class="midbody">
+  <h2 id="shell_1">
+   Shell 变量
+  </h2>
+  <p>
+   与其他高级语言一样，Shell 支持自定义变量。Shell 的变量类型有两种，即 Shell 环境变量（Shell Enviroment Variable）和用户自定义变量（User Define Variable）。
+  </p>
+  <h3 id="shell_2">
+   Shell 的环境变量
+  </h3>
+  <p>
+   Shell 环境变量的作用是定制 Shell 的运行环境，并保证 Shell 命令的正确执行。它又分为可写和只读两大类。
+  </p>
+  <h4 id="_1">
+   可写的环境变量
+  </h4>
+  <p>
+   可写的环境变量可以对其进行赋值操作，大部分可写的 shell 环境变量都在登录过程中执行
+   <code>
+    “/etc/profile”
+   </code>
+   文件时进行初始化。该文件在用户登录时，被系统自动执行，为所有用户设置公共的工作环境。用户也可以通过修改自己主目录下的
+   <code>
+    .profile
+   </code>
+   或
+   <code>
+    .bash_profile
+   </code>
+   中的部分变量值来定制自己的运行环境。以下列出部分可写的环境变量：
+  </p>
+  <div class="hblock">
+   <strong>
+    BASH
+   </strong>
+   展开为调用bash实例时使用的全路径名
+   <br/>
+   <strong>
+    CDPATH
+   </strong>
+   cd命令的搜索路径。它是以冒号分隔的目录列表，shell通过它来搜索cd命令指定的目标目录。
+   <br/>
+   <strong>
+    EDITOR
+   </strong>
+   内置编辑器emacs、gmacs或vi的路径名
+   <br/>
+   <strong>
+    ENV
+   </strong>
+   每一个新的bash shell(包括脚本)启动时执行的环境文件。通常赋予这个变量的文件名是.bashrc。
+   <br/>
+   <strong>
+    EUID
+   </strong>
+   展开为在shell启动时被初始化的当前用户的有效ID
+   <br/>
+   <strong>
+    GROUPS
+   </strong>
+   当前用户所属的组
+   <br/>
+   <strong>
+    HISTFIL
+   </strong>
+   E 指定保存命令行历史的文件。默认值是~/.bash_history。如果被复位，交互式shell退出时将不保存命令行历史
+   <br/>
+   <strong>
+    HISTSIZE
+   </strong>
+   记录在命令行历史文件中的命令数。默认是500
+   <br/>
+   <strong>
+    HOME
+   </strong>
+   主目录。未指定目录时，cd命令将转向该目录
+   <br/>
+   <strong>
+    IFS
+   </strong>
+   内部字段分隔符，一般是空格符、制表符和换行符，用于由命令替换，循环结构中的表和读取的输入产生的词的字段划分
+   <br/>
+   <strong>
+    LANG
+   </strong>
+   用来为没有以LC_开头的变量明确选取的种类确定locale类
+   <br/>
+   <strong>
+    OLDPWD
+   </strong>
+   前一个工作目录
+   <br/>
+   <strong>
+    PATH
+   </strong>
+   命令搜索路径。一个由冒号分隔的目录列表，shell用它来搜索命令。
+   <br/>
+   <strong>
+    LD_LIBRARY_PATH
+   </strong>
+   库文件搜索路径。在执行程序是会自动到该变量设置的路径下搜索库文件。
+   <br/>
+   <strong>
+    PPID
+   </strong>
+   父进程的进程ID
+   <br/>
+   <strong>
+    PS1
+   </strong>
+   主提示符串，默认值是$
+   <br/>
+   <strong>
+    PS2
+   </strong>
+   次提示符串，默认值是&gt;
+   <br/>
+   <strong>
+    PS3
+   </strong>
+   与select命令一起使用的选择提示符串，默认值是#?
+   <br/>
+   <strong>
+    PS4
+   </strong>
+   当开启追踪时使用的调试提示符串，默认值是+。追踪可以用set –x开启
+   <br/>
+   <strong>
+    PWD
+   </strong>
+   当前工作目录。由cd设置
+   <br/>
+   <strong>
+    RANDOM
+   </strong>
+   每次引用该变量，就产生一个随机整数。随机数序列可以通过给RANDOM赋值来初始化。如果RANDOM被复位，即使随后再设置，它也将失去特定的属性
+   <br/>
+   <strong>
+    REPLY
+   </strong>
+   当没有给read提供参数时设置
+   <br/>
+   <strong>
+    SHEL
+   </strong>
+   L 当调用shell时，它扫描环境变量以寻找该名字。shell给PATH、PS1、PS2、MAILCHECK和IFS设置默认值。HOME和MAIL由login(1)设置
+   <br/>
+   <strong>
+    SHELLOPTS
+   </strong>
+   包含一列开启的shell选项，比如braceexpand、hashall、monitor等
+   <br/>
+   <strong>
+    UID
+   </strong>
+   展开为当前用户的用户ID，在shell启动时初始化
+  </div>
+  <p>
+   这里重点讲解一下
+   <code>
+    PATH
+   </code>
+   和
+   <code>
+    LD_LIBRARY_PATH
+   </code>
+   环境变量，这两个变量是在我的工作经历中用得最多的，如果在 Linux 下进行工作，就不可避免的会用到这两个变量。其他变量也并非不重要，有的使用频率也很高，只是相对来说 PATH 和 LD_LIBRARY_PATH 的实用性很强。
+   <strong>
+    PATH
+   </strong>
+   用于保存可执行文件的搜索路径，在该变量中的目录下的可执行程序可以直接执行。
+   <strong>
+    LD_LIBRARY_PATH
+   </strong>
+   用于保存库文件的搜索路径，在 Linux 中通常把很多程序都会用到的通用的库文件方法一些固定的目录下，程序运行时再到这些目录中去搜索加载库文件。在工作，我通常需要编译统一软件的多个版本，并且同时放到系统中运行。这个时候，如果将多个版本都直接安装到系统指定的目录中，则会引起混乱，或者覆盖之前的版本。所以
+   <code>
+    PATH
+   </code>
+   和
+   <code>
+    LD_LIBRARY_PATH
+   </code>
+   环境变量就起到了作用，你可以将不同的版本安装到不同的目录下，然后将它们的可执行文件路径和库文件路径添加到 PATH 和 LD_LIBRARY_PATH 变量中。在做嵌入式的开发中，配置交叉编译工具时，也会用到这两个变量。
+  </p>
+  <p>
+   环境变量一般都是大写的，系统启动后自动加载，可写的环境变量用户也可以随时进行修改。查看环境变量时，可以在变量名前加上美元符号
+   <code>
+    $
+   </code>
+   ，然后再用 echo 打印, 例如：
+  </p>
+  <blockquote>
+   <p>
+    echo $PS1
+   </p>
+  </blockquote>
+  <p>
+   输出结果：
+  </p>
+  <p>
+   [\033[01;32m]\u[\033[01;31m]$[\033[01;36m][\W][\033[01;32m] -&gt;[\033[00m]
+  </p>
+  <p>
+   这是我的终端提示符样式，我在
+   <code>
+    ～/.bashrc
+   </code>
+   文件中对其进行了设置。
+  </p>
+  <h4 id="_2">
+   只读的环境变量
+  </h4>
+  <p>
+   只读的 Shell 环境变量意味着用户能使用和读取它们的值，而不能对他们进行修改。只读的 Shell 环境变量有两种：一种是特殊的环境变量，另一种是位置参数。
+  </p>
+  <p>
+   <strong>
+    （1）特殊环境变量
+   </strong>
+  </p>
+  <p>
+   特殊的环境变量是系统预先定义好的，用户不能重新设置，常见的只读环境变量如下所示：
+  </p>
+  <div class="hblock"><pre>
+$0：当前脚本的文件名
+$num：num为从1开始的数字， $1是第一个参数，$2是第二个参数，
+$#：传入脚本的参数的个数
+$*：所有的位置参数(作为单个字符串)
+$@：所有的位置参数(每个都作为独立的字符串)。
+$?：当前shell进程中，上一个命令的返回值，如果上一个命令成功执行则$?的值为0，否则为其他非零值，常用做if语句条件
+$$：当前shell进程的pid
+$!：后台运行的最后一个进程的pid
+$-：显示shell使用的当前选项
+$_：之前命令的最后一个参数</pre>
+  </div>
+  <p>
+   <strong>
+    （2）位置参数
+   </strong>
+  </p>
+  <p>
+   用于处理命令行参数（Command Lines Argument），出现在命令行上的位置确定的参数称作位置参数（Positon Argument），也就是在命令行传递给 Shell 脚本的参数。
+  </p>
+  <p>
+   在 Bash 中总共有十个位置参数，其对应的名称一次是
+   <mathjax>
+    $0, $
+   </mathjax>
+   1,
+   <mathjax>
+    $2, $
+   </mathjax>
+   3,
+   <mathjax>
+    $4, $
+   </mathjax>
+   5,
+   <mathjax>
+    $6, $
+   </mathjax>
+   7,
+   <mathjax>
+    $8, $
+   </mathjax>
+   9。其中
+   <mathjax>
+    $0 始终表示命令名或者 Shell 脚本名，对于一个名行，必然有命令名，也就必有 $
+   </mathjax>
+   0；而其他位置参数依据实际需求，可有可无。
+  </p>
+  <ul>
+   <li>
+    输出位置参数:
+   </li>
+  </ul>
+  <p>
+   可以用 echo 命令输出位置参数。如下例所示：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test2-1.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+echo $1 $2 $3 $4 $5 $6 $7 $8 $9 $0
+</code></pre>
+  <p>
+   执行该脚本：
+  </p>
+  <blockquote>
+   <p>
+    sh test2-1.sh a b c d e f g
+   </p>
+  </blockquote>
+  <p>
+   输出：
+  </p>
+  <p>
+   a b c d e f g test2-1.sh
+  </p>
+  <ul>
+   <li>
+    用 set 命令给位置参数赋值
+   </li>
+  </ul>
+  <p>
+   除了 $0 不能用 set 赋值外，其他位置参数都能用 set 对其手动赋值。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test2-2.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+echo $1 $2 $3
+set m1 m2 m3
+echo $1 $2 $3
+</code></pre>
+  <p>
+   运行脚本：
+  </p>
+  <blockquote>
+   <p>
+    sh test2-2.sh a1 a2 a3
+   </p>
+  </blockquote>
+  <p>
+   输出：
+  </p>
+  <p>
+   a1 a2 a3
+   <br/>
+   m1 m2 m3
+  </p>
+  <ul>
+   <li>
+    移动位置参数
+   </li>
+  </ul>
+  <p>
+   在 Shell 中规定，位置参数最多不能超过 9 个，即
+   <mathjax>
+    $1 ~ $
+   </mathjax>
+   9。如果实际给定的命令行参数多于 9 个，就需要用 shift 命令移动位置参数。执行一次 shift 命令，就把诶之参数整体向左移一位，即原来
+   <mathjax>
+    $1 的值被移走了，新 $
+   </mathjax>
+   1 的值是原来
+   <mathjax>
+    $2 的值，新 $
+   </mathjax>
+   2 的值是原来
+   <mathjax>
+    $3 的值，依次类推。Shitf 命令不会将 $
+   </mathjax>
+   0 移走，所以经 shitf 左移参数后，
+   <mathjax>
+    $1 不会取代 $
+   </mathjax>
+   0 的值。Shift 命令可以带有一个整数作为参数，该参数表示一次左移的位数，若果未带参数，则默认值为1。如下示例所示：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test2-3.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+echo $0 $1 $2 $3 $4 $5 $6 $7 $8 $9 $#
+shift
+echo $0 $1 $2 $3 $4 $5 $6 $7 $8 $9 $#
+shift 5
+echo $0 $1 $2 $3 $4 $5 $6 $7 $8 $9 $#
+</code></pre>
+  <p>
+   执行脚本：
+  </p>
+  <blockquote>
+   <p>
+    sh test2-3.sh a b c d f g h i j k
+   </p>
+  </blockquote>
+  <p>
+   输出结果:
+  </p>
+  <p>
+   test2-3.sh a b c d f g h i j 10
+   <br/>
+   test2-3.sh b c d f g h i j k 9
+   <br/>
+   test2-3.sh h i j k 4
+  </p>
+  <h3 id="shell_3">
+   Shell 的用户自定义变量
+  </h3>
+  <p>
+   Shell 编程中允许用户自定义变量，变量拥有临时的存储空间，在程序执行过程中其值可以改变，这些变量可以被设置为只读，也可以传递给定义他们的 Shell 脚本中的命令。Shell 中的变量无需声明和初始化，一个未初始化的 Shell 变量，其默认的初始化值为空字符串。
+  </p>
+  <p>
+   用户自定义变量的命名只要是合法的标识符即可，且区分大小写，变量名的长度不收限制。定义变量名并赋值的形式有以下几种：
+  </p>
+  <p>
+   （1）字符串赋值，其格式为：
+  </p>
+  <blockquote>
+   <p>
+    变量名=字符串
+   </p>
+  </blockquote>
+  <p>
+   例如：
+   <code>
+    mydir=/home/a
+   </code>
+   ，其中，“mydir”是变量名，“=”是赋值符号，字符串“/home/a”是赋予的值。变量的值可以改变，秩序利用赋值语句重新给它赋值即可。
+   <strong>
+    注意：
+   </strong>
+   再赋值语句中，赋值符号的两边没有空格，否则在执行时会引起错误。
+  </p>
+  <p>
+   在程序中，变量的使用方式是再变量名前加上符号
+   <code>
+    $
+   </code>
+   。该符号告诉 Shell 要取出其后变量的值。示例：
+  </p>
+  <blockquote>
+   <p>
+    $ mydir=/home/a
+   </p>
+   <p>
+    <mathjax>
+     $ echo $
+    </mathjax>
+    mydir
+   </p>
+   <p>
+    mydir=/home/a
+   </p>
+   <p>
+    $ echo mydir
+   </p>
+   <p>
+    mydir
+   </p>
+  </blockquote>
+  <p>
+   以上演示结果显示，如果不加
+   <code>
+    $
+   </code>
+   就如法引用变量的值。
+  </p>
+  <p>
+   （2）如果再赋值给变量的值中含有空格、制表符或者换行符，那么就应该用双引号把这个字符串括起来。例如：myname=”Huoty Kong”，如果没有用引号括起来，则 myname 的值就是 Huoty。
+  </p>
+  <p>
+   （3）变量值可以作为某个长字符串中的一部分，如果它在长字符串的末尾，就可以利用直接引用形式。变量名出现在一个长字符串的开头或者中间，应该用
+   <code>
+    "{}"
+   </code>
+   把变量名括起来。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test2-1.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+s1=ing
+echo walk$s1 or read$s1 or sleep$s1
+dir=/home/huoty/
+echo ${dir}m1.c
+</code></pre>
+  <p>
+   使用不带参数的
+   <code>
+    set
+   </code>
+   命令可以显示可以显示所有 Shell 变量（包括环境变量和用户自定义变量）名以及它们的当前值。Set 命令也可以用于改变一些只读 Shell 环境变量的值。对用户自定义变量使用
+   <code>
+    readonly
+   </code>
+   命令，可以将变量定义为只读变量，只读变量的值不能被改变。定义好的变量也可以使用
+   <code>
+    unset
+   </code>
+   命令进行删除。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test2-1.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+myEmail="huoty@gmail.com"
+echo $myEmail
+unset myEmail
+echo $myEmail
+
+myUrl="http://kuanghy.github.io/"
+echo $myUrl
+readonly myUrl
+myUrl="http://kuanghy.github.io/kswd"
+</code></pre>
+  <p>
+   运行时会出现如下错误：
+  </p>
+  <p>
+   test2-5.sh: 15: test2-5.sh: myUrl: is read only
+  </p>
+  <h3 id="varext">
+   Shell 的变量扩展功能
+  </h3>
+  <p>
+   Shell 中有一些变量扩展的技巧，可以很方便的处理变量。
+  </p>
+  <h4 id="var_1">
+   取子符串
+  </h4>
+  <p>
+   Shell 从变量中取子字符串的规则如下：
+  </p>
+  <blockquote>
+   <p>
+    ${变量名:位置起点}
+   </p>
+   <p>
+    ${变量名:位置起点:长度}
+   </p>
+  </blockquote>
+  <p>
+   示例：
+  </p>
+  <pre><code>var="12345678"
+echo ${var:5}
+echo${var:0:5}
+</code></pre>
+  <p>
+   执行脚本输出结果为：
+  </p>
+  <div class="hblock">
+   <pre>
+678
+12345
+</pre>
+  </div>
+  <h4 id="var_2">
+   计算字符串长度
+  </h4>
+  <p>
+   在 Shell 中可以计算字符串的长度，其规则为：
+  </p>
+  <blockquote>
+   <p>
+    ${#变量名称}
+   </p>
+  </blockquote>
+  <p>
+   示例：
+  </p>
+  <pre><code>var="12345678"
+echo ${#var}  # 输出：8
+</code></pre>
+  <h4 id="var_3">
+   对比样式
+  </h4>
+  <blockquote>
+   <p>
+    规则1：${变量#样式}
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    含义：
+   </strong>
+   表示由变量值的最左边开始与样式进行对比，删除”最短相符合的字符串”
+  </p>
+  <p>
+   例1：
+  </p>
+  <pre><code>var="12345678"
+echo ${var#*3} #输出:45678
+</code></pre>
+  <blockquote>
+   <p>
+    规则2：${变量##样式}
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    含义：
+   </strong>
+   表示由变量值的最左边开始与样式进行对比，删除”最长相符合的字符串”
+  </p>
+  <p>
+   例2：
+  </p>
+  <pre><code>var="12341234"
+echo ${var##*3}  # 输出：4
+</code></pre>
+  <blockquote>
+   <p>
+    规则3：${变量%样式}
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    含义：
+   </strong>
+   表示由变量值的最右边或最后边开始与样式进行对比，删除”最短相符的字符串”
+  </p>
+  <p>
+   例3：
+  </p>
+  <pre><code>var="12341234"
+echo ${var%3*}  # 输出：123412
+</code></pre>
+  <blockquote>
+   <p>
+    规则4：${变量%%样式}
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    含义：
+   </strong>
+   表示由变量值的最右边或最后边开始与样式进行对比，删除”最长相符的字符串”
+  </p>
+  <p>
+   例4：
+  </p>
+  <pre><code>var="12341234"
+echo ${var%%3*}  # 输出：12
+</code></pre>
+  <h4 id="var_4">
+   替换或删除部分字符串
+  </h4>
+  <blockquote>
+   <p>
+    规则1：${变量/样式/替换字符串}
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    含义：
+   </strong>
+   如果变量中有符合样式的字符串，则使用替换字符串替代，只替换第一个符合样式的字符串
+  </p>
+  <p>
+   例1：
+  </p>
+  <pre><code>var="12341234"
+echo ${var/1234/1111}  # 输出：11111234
+</code></pre>
+  <blockquote>
+   <p>
+    规则2：${变量//样式/替换字符串}
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    含义：
+   </strong>
+   如果变量中有符合样式的字符串，则使用替换字符串替代，替换全部符合样式的字符串
+  </p>
+  <p>
+   例1：
+  </p>
+  <pre><code>var="12341234"
+echo ${var//123/}  # 输出：44
+</code></pre>
+  <h3 id="array">
+   Shell 定义数组
+  </h3>
+  <p>
+   Bash 支持一维数组（不支持多维数组），并且没有限定数组的大小，数组元素的下标由0开始编号。获取数组中的元素要利用下标，下标可以是整数或算术表达式，其值应大于或等于0。 在 Shell 中，用括号来表示数组，数组元素用“空格”符号分割开。定义数组的一般形式为：
+  </p>
+  <blockquote>
+   <p>
+    array_name=(value0 value1 value2 … valuen)
+   </p>
+  </blockquote>
+  <p>
+   也可以单独定义数组的各个分量：
+  </p>
+  <pre><code>array_name[0]=value0
+array_name[1]=value1
+array_name[2]=value2
+...
+array_name[n]=valuen
+</code></pre>
+  <p>
+   读取数组元素值的一般格式是：
+  </p>
+  <blockquote>
+   <p>
+    ${array_name[index]}
+   </p>
+  </blockquote>
+  <p>
+   使用@ 或 * 可以获取数组中的所有元素，示例：
+  </p>
+  <pre><code>#!/bin/sh
+NAME[0]="Zara"
+NAME[1]="Qadir"
+NAME[2]="Mahnaz"
+NAME[3]="Ayan"
+NAME[4]="Daisy"
+echo "First Index: ${NAME[0]}"
+echo "Second Index: ${NAME[1]}"
+echo "First Method: ${NAME[*]}"
+echo "Second Method: ${NAME[@]}"
+</code></pre>
+  <p>
+   获取数组长度的方法与获取字符串长度的方法相同，例如：
+  </p>
+  <pre><code># 取得数组元素的个数
+length=${#array_name[@]}
+# 或者
+length=${#array_name[*]}
+# 取得数组单个元素的长度
+lengthn=${#array_name[n]}
+</code></pre>
+  </div> <!-- end midbody-->
+
+  <div class="bottomnav">
+        <p>
+        «&#160;&#160;<a href="chapter1.html">Shell 概述</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter3.html">Shell 中的特殊字符</a>&#160;&#160;»
+        </p>
+  </div>
+
+  <div class="footer">
+    Copyright &copy; 2015 <a href="http://kuanghy.github.io/about/">Huoty</a>,
+    Created using <a href="">Github</a>, Version 0.1
+  </div>
+ </body>
+</html>

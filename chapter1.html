@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="shell, bash, Linux, 程序设计">
+        <meta name="description" content="Shell 程序设计教程">
+        <meta name="author" content="Huoty">
+        <title>Shell 概述 | Shell 程序设计教程</title>
+        <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+
+        <!-- 实现 Github 风格的语法高亮 -->
+        <link href="css/github.min.css" rel="stylesheet"/>
+        <script src="js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <script src="js/MathJax.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+        </script>
+    </head>
+ <body>
+  <!-- 页面头部 -->
+  <div class="header"> 
+    <h1 id="shell">Shell 程序设计教程</h1>
+  </div>
+  <div class="topnav">
+    <p>
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter2.html">Shell 变量</a>&#160;&#160;»
+    </p>
+  </div>
+  
+  <!-- 页面主体 -->
+  <div class="midbody">
+  <h2 id="shell">
+   Shell 概述
+  </h2>
+  <p>
+   Shell 脚本程序不同于其他高级计算机程序设计语言，例如 C、C++、Java 等，它没有十分规范的格式，只是简单的将 UNIX/Linux 的命令工具顺序的或者通过罗辑控制组合在一起，形成更大强大的功能。在计算机程序语言中，还有很多的脚本语言，像 ASP、JSP、JavaScript、PHP、Python、Perl 等，但个人觉得它们只是形式上像脚本语言而已，它们都有着比较严格的规范，能够实现更加强大的功能，其实际上已经属于高级语言的范畴了。我个人认为 Shell 脚本是简单的，尽管它也可以很复杂，但你也应该认为它是简单的。
+  </p>
+  <h3 id="shell_1">
+   Shell 简介
+  </h3>
+  <h4 id="shell_2">
+   Shell 的功能
+  </h4>
+  <p>
+   通常人们所理解的 shell 是指 UNIX/Linux 的命令解释器，其主要功能是：接受用户输入的命令进行分析，创建子进程，由子进程实现命令所规定的功能，等子进程终止后发出提示符。
+  </p>
+  <p>
+   而实际上 Shell 有两层含义，其中一个是作为命令解释程序，另一个是作为一种程序设计语言。Shell 程序设计可以简单地理解成 DOS/Windows 下的批处理，但它远比批处理要强大，shell 编程有很多 C 语言和其他编程语言的特性，例如都有变量和各种控制语句等，然而又没有其他编程语言那么复杂。
+  </p>
+  <h4 id="shell_3">
+   Shell 的主要版本
+  </h4>
+  <p>
+   目前，Shell 是 UNIX/Linux 系统的标准组成部分，正如 UNIX 的版本众多一样，Shell 也产生了很多个版本，经过多年的发展和完善，现在流行的 Shell 主要有 sh（Bourne Shell）、bash（Bourne Shell）、csh（C-Shell）、ksh（Korn Shell）。
+  </p>
+  <p>
+   <strong>
+    sh
+   </strong>
+  </p>
+  <p>
+   sh 由 Steve Bourne 开发，是 Bourne Shell 的缩写，sh 是 Unix 标准默认的shell。
+  </p>
+  <p>
+   <strong>
+    bash
+   </strong>
+  </p>
+  <p>
+   bash是 Linux 标准默认的 shell。bash 由 Brian Fox 和 Chet Ramey 共同完成，是 BourneAgain Shell 的缩写，内部命令一共有40个。bash 完全兼容 sh，也就是说，用 sh 写的脚本可以不加修改的在bash中执行。
+  </p>
+  <p>
+   Linux使用它作为默认的shell是因为它有诸如以下的特色：
+  </p>
+  <ul>
+   <li>
+    可以使用类似DOS下面的doskey的功能，用方向键查阅和快速输入并修改命令。
+   </li>
+   <li>
+    自动通过查找匹配的方式给出以某字符串开头的命令。
+   </li>
+   <li>
+    包含了自身的帮助功能，你只要在提示符下面键入help就可以得到相关的帮助。
+   </li>
+  </ul>
+  <p>
+   <strong>
+    ash
+   </strong>
+  </p>
+  <p>
+   ash shell 是由Kenneth Almquist编写的，Linux中占用系统资源最少的一个小shell，它只包含24个内部命令，因而使用起来很不方便。
+  </p>
+  <p>
+   <strong>
+    csh
+   </strong>
+  </p>
+  <p>
+   csh 是Linux比较大的内核，它由以William Joy为代表的共计47位作者编成，共有52个内部命令。该shell其实是指向/bin/tcsh这样的一个shell，也就是说，csh其实就是tcsh。
+  </p>
+  <p>
+   <strong>
+    ksh
+   </strong>
+  </p>
+  <p>
+   ksh 是Korn shell的缩写，由Eric Gisin编写，共有42条内部命令。该shell最大的优点是几乎和商业发行版的ksh完全兼容，这样就可以在不用花钱购买商业版本的情况下尝试商业版本的性能了。
+  </p>
+  <p>
+   本教程所介绍的 shell 即是 Bash　版本的　shell，其他版本的 shell 与之类似，区别不大。
+  </p>
+  <h4 id="_1">
+   脚本语言与编译型语言的差异
+  </h4>
+  <p>
+   <strong>
+    编译型语言:
+   </strong>
+   <br/>
+   很多传统的程序设计语言，例如Fortran、Ada、Pascal、C、C++和Java，都是编译型语言。这类语言需要预先将写好的源代码(source code)转换成目标代码(object code)，这个过程被称作“编译”。运行程序时，直接读取目标代码(object code)。由于编译后的目标代码(object code)非常接近计算机底层，因此执行效率很高，这是编译型语言的优点。但是，由于编译型语言多半运作于底层，所处理的是字节、整数、浮点数或是其他机器层级的对象，往往实现一个简单的功能需要大量复杂的代码。例如，在C++里，就很难进行“将一个目录里所有的文件复制到另一个目录中”之类的简单操作。
+  </p>
+  <p>
+   <strong>
+    脚本语言:
+   </strong>
+   <br/>
+   脚本语言是一种通过解释执行的语言。这类语言通常需要一个特定的解释器来解释执行。执行这类程序时，解释器(interpreter)需要读取我们编写的源代码(source code)，并将其转换成目标代码(object code)，再由计算机运行。因为每次执行程序都多了编译的过程，因此效率有所下降。使用脚本编程语言的好处是，它们多半运行在比编译型语言还高的层级，能够轻易处理文件与目录之类的对象；缺点是它们的效率通常不如编译型语言。脚本语言非常的便捷，可以花很短的时间完成很多复杂的功能。脚本编程语言的例子有awk、Perl、Python、Ruby与Shell。
+  </p>
+  <h4 id="shell_4">
+   第一个 shell 程序
+  </h4>
+  <p>
+   一般在命令行操作的时候，通常只能简单的输入一个命令，例如
+   <code>
+    ls -l
+   </code>
+   。如果需要一次做很多工作的时候，就需要用到 shell 脚本程序。那么现在来写我们的第一个 shell 程序。是不是以为这里会写一个输出 “Hello World” 的程序？算了吧，这样一个简单的输出语句不足以体现 shell 的强大。如果我们想看看当前所在的目录位置，再看看主目录下有没有 vim 的配置文件，然后再打印一下今天的日历，接着看看当前登入系统的用户，最后再看看当前网络的配置情况，那么可以写成如下的 shell 脚本：
+  </p>
+  <pre><code>pwd
+ls -l ~/.vimrc
+cal
+who
+ifconfig
+</code></pre>
+  <p>
+   将以上内容保存成 test1-1.sh, 然后用如下方式执行：
+  </p>
+  <blockquote>
+   <p>
+    sh test1-1.sh
+   </p>
+  </blockquote>
+  <p>
+   你会看到上边的例子只是一些简单命令的罗列，而且输出结果也很乱。这里只是为了体现出 shell 脚本的本质，它主要用于将一些简单的工具命令进行组合，实现更为复杂的功能。上边的例子看上去虽然凌乱，但却一次输出了我们想要看到的很多信息。
+  </p>
+  <h3 id="shell_5">
+   Shell 脚本的建立与执行
+  </h3>
+  <h4 id="shell_6">
+   Shell 脚本的建立
+  </h4>
+  <p>
+   建立 Shell 脚本的方法同建立普通文本文件的方式相同，利用自己称手的文本编辑器编辑即可。在 Shell 脚本中，采用
+   <code>
+    #
+   </code>
+   号来做程序注释。但是有一个特殊的符号需要注意，即
+   <code>
+    #!
+   </code>
+   。该符号虽以
+   <code>
+    #
+   </code>
+   号开头，但却不代表注释，该符号用于声明解释脚本所用的解释器，例如
+   <code>
+    #!/bin/bash
+   </code>
+   表示用 /bin 目录下的 bash 解释器来解释执行脚本。或许你会发现，在我们的第一个例子中，没有写这样类似的语句。如果在脚本中没有声明解释器，则会采用系统默认的解释器来执行。但一般情况建议加上，这样在平台移植的时候便于错误调试。
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test1-2.sh
+# Author: huoty
+# CreateDate: 2015-08-21 13:35:00
+
+echo "What is your name?"
+read PERSON
+echo "Hello, $PERSON"
+</code></pre>
+  <p>
+   该脚本从标准输入读取用户输入，然后再回显到输出。
+   <code>
+    read
+   </code>
+   用于从标准输入获取用户输入，
+   <code>
+    PERSON
+   </code>
+   是一个变量，使用变量的方式是在变量前加美元符号
+   <code>
+    $
+   </code>
+   。
+  </p>
+  <p>
+   对于 shell 脚本文件的命名没有任何限制，只要符合 UNIX/Linux 下的文件命令规则即可。Shell脚本文件的默认后缀名是
+   <code>
+    .sh
+   </code>
+   。在 UNIX/Linux 中不以文件的后缀名来区分的文件类型，所以在为 shell 脚本文件命名时不需要添加额外的后缀名。当然，也可以为你的 shell 脚本文件加上
+   <code>
+    .sh
+   </code>
+   的后缀名，这样一些编辑器会为文件添加语法高亮显示，这样看起来比较方便。
+  </p>
+  <h4 id="shell_7">
+   Shell 脚本的执行方式
+  </h4>
+  <p>
+   执行 shell 脚本的方式一般有三种。
+  </p>
+  <p>
+   <strong>
+    一、输入定向的执行方式
+   </strong>
+  </p>
+  <p>
+   这种方式是用输入重定向的方式让 Shell 从给定文件中读入命令行并进行相应的处理，其格式为：
+  </p>
+  <blockquote>
+   <p>
+    sh &lt; script-name
+   </p>
+  </blockquote>
+  <p>
+   <code>
+    sh
+   </code>
+   实际上是一个软链接，它代表的是系统默认的 shell 解释器，用
+   <code>ls -l `which sh`</code>
+   命令可以查看，例如在我的系统上 sh 就指向的是 <code>dash</code>。既然说到这儿，我就简单说说 bash 与 dash 区别。<code>dash</code> 是轻量级的 shell 解释器，他比 bash 少了很多功能，但速度比 bash 快，例如变量的很多扩展功能 dash 就不支持。<b>所以在编写脚本时，一定要注意文件头部申明的解释器类型，否则脚本程序可能无法正常运行</b>。
+  </p>
+  <p>
+   <strong>
+    二、以脚本名作为 Shell 参数的执行方式
+   </strong>
+  </p>
+  <p>
+   这种方式是脚本名作为 Shell 命令的参数。利用该方式则可以在执行命令时向脚本传递参数。其格式为：
+  </p>
+  <blockquote>
+   <p>
+    sh script-name [parameter]
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    三、改为可执行权限后的直接执行方式
+   </strong>
+  </p>
+  <p>
+   给 shell 脚本添加可执行权限后变可以直接执行。添加可执行权限可以用如下命令：
+  </p>
+  <blockquote>
+   <p>
+    chmod a+x script-name
+   </p>
+  </blockquote>
+  <p>
+   在执行脚本时需要加上路径，也就是要让系统找到脚本文件的位置。例如在当前目录下则可用如下方式执行：
+  </p>
+  <blockquote>
+   <p>
+    ./script-name
+   </p>
+  </blockquote>
+  <p>
+   如果想让编写的 Shell 脚本像 Shell 提供的命令一样为每个用户使用（即在任何位置直接输入命令即可执行），可以在编写好的 shell 脚本上为所有用户添加可执行权限后，将其放在命令搜索路径的目录之下（环境变量 PATH 所包含的路径，可以用
+   <code>
+    echo $PATH
+   </code>
+   命令查看），这样就等于为系统开发了一个新的命令工具。
+  </p>
+  <p>
+   Shell 接收用户输入的 shell 命令和脚本名进行分析。如果文件被标记有可执行权限，但不是被编译过的程序，就认为它是一个 shell 脚本。Shell 将读取其中的内容，并加以解释执行。
+  </p>
+  <h4 id="shell_8">
+   Shell 脚本的执行流程
+  </h4>
+  <p>
+   默认情况下，shell 脚本的执行是通过创建子进程来完成的。首先，交互式 shell（bash） fork/exec 一个子 shell（sh）用于执行脚本，父进程 bash 等待子进程 sh 终止。接着 sh 读取脚本中的内容执行，直到读到文件尾，sh终止。Sh 终止后，bash 继续执行，打印提示符等待用户输入。
+  </p>
+  <p>
+   如果将命令行下输入的命令用括号括起来，那么也会 fork 出一个子 shell 执行小括号中的命令，一行中可以输入由分号隔开的多个命令，例如：
+  </p>
+  <blockquote>
+   <p>
+    (cd ..; ls -l)
+   </p>
+  </blockquote>
+  <p>
+   当执行以上命令后你会发现，虽然执行了
+   <code>
+    cd ..
+   </code>
+   命令，但是 shell 当前的路径并没改变，这就是因为它是通过创建子进程来执行的原因。这跟执行脚本的效果是一样的。但是如果用
+   <code>
+    source
+   </code>
+   命令或者
+   <code>
+    .
+   </code>
+   来执行脚本时，则不会创建子进程，而是直接在交互式 shell 中执行脚本中的命令。如下所示：
+  </p>
+  <blockquote>
+   <p>
+    source ./script-name
+   </p>
+  </blockquote>
+  <p>
+   或
+  </p>
+  <blockquote>
+   <p>
+    . ./script-name
+   </p>
+  </blockquote>
+  </div> <!-- end midbody-->
+
+  <div class="bottomnav">
+        <p>
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter2.html">Shell 变量</a>&#160;&#160;»
+        </p>
+  </div>
+
+  <div class="footer">
+    Copyright &copy; 2015 <a href="http://kuanghy.github.io/about/">Huoty</a>,
+    Created using <a href="">Github</a>, Version 0.1
+  </div>
+ </body>
+</html>

@@ -1,0 +1,224 @@
+* {
+    /* 重置页面 */
+    padding:0;
+    margin:0;
+    list-style-type:none;
+}
+
+body {
+    margin: auto;
+    padding: 0px;
+    line-height: 1.6em; /*行间距*/
+    font-size:17px;
+    /*font-family: "DejaVu Sans", Arial, Helvetica, sans-serif;*/
+    /*font-family:"Times New Roman",Times,serif;*/
+    font-family:"Trebuchet MS",Arial,Helvetica,sans-serif;
+    /*font-family:Georgia,"Times New Roman",Times,serif;*/
+    color: #333333;
+    background: #EDEDED;
+}
+
+/* 页面头部 */
+.header {
+    width:100%;
+    height: 80px;
+    margin: 0 auto;
+    overflow: hidden; /* 防止div被撑开，超过div大小就隐藏 */
+    background: #B0B0B0; /* 背景色 */
+    /*border-bottom: thick inset #999999;*/
+}
+
+.header h1 {
+    margin: 25px 5em;
+    overflow: visible; 
+    text-shadow: #f3f3f3 1px 1px 0px, #b2b2b2 1px 2px 0;
+}
+
+/* 顶部跳转栏 */
+.topnav {
+	background: #737373;
+}
+
+.topnav p {
+	margin: auto;
+    min-width: 72%;
+    max-width: 80%;
+    text-align: right;
+    font-size: 1em;
+}
+
+/* 底部跳转栏 */
+.bottomnav {
+	background: #737373;
+	margin: auto;
+    min-width: 90%;
+    max-width: 90%;
+}
+
+.bottomnav p {
+	margin: auto;
+    min-width: 80%;
+    max-width: 86%;
+    text-align: right;
+    font-size: 1em;
+}
+
+/* 页面中间主体 */
+.midbody {
+	padding: 0 10em;
+	margin: 0.5em auto;
+    min-width: 40%;
+    max-width: 80%;
+}
+
+/* 页脚 */
+.footer {
+	padding: 8px;
+    font-size: 11px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+h2 {
+	/*border-bottom:1px dotted #3D3D3D;*/
+    font-size: 30px;
+	margin-top: 1em;
+    text-align:center;
+}
+
+h3 {
+    font-size: 25px;
+    margin-top: 1.5em;
+    padding-left: 0.8em;
+    /*font-family: Arial, sans-serif;*/
+    border-bottom:1px dotted #3D3D3D;
+    background: url(../imgs/triangle_right_16px.ico) no-repeat 0 50%;
+}
+
+h4 {
+    font-size: 20px;
+    /*font-weight: normal;*/
+    color: #0c3762;
+    padding-left: 1.4em;
+    margin-top: 1.2em;
+    /*border-bottom:1px dotted #3D3D3D;*/
+    background: url(../imgs/triangle_double_arrow_right_16px.ico) no-repeat 0 50%;
+}
+
+p {
+	margin:1em 0;
+    /*text-indent: 2em;*/
+}
+
+/* link colors and text decoration */
+a:link {
+    font-weight: bold;
+    text-decoration: none;
+    color: #892601;
+}
+
+a:visited {
+    font-weight: bold;
+    text-decoration: none;
+    color: #FF9E7A;
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+    color: #ff4500;
+}
+
+ul { 
+    padding-left: 15px;
+    margin-left: 5px;
+    list-style: square inside url("../imgs/arrow_16px.png");
+}
+
+ol {
+    list-style-type: lower-roman
+}
+
+code {
+    font-size:16px;
+    padding: 0px 4px;
+    color: #d14;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    white-space: nowrap;
+    font-weight: normal;
+}
+
+pre code{
+    font-size:15px;
+    white-space: pre;
+    line-height: 1.4em; /*行间距*/
+}
+
+blockquote {
+    background:#f9f9f9;
+    border-left:10px solid #ccc;
+    margin:1.5em 10px;
+    padding:.5em 10px;
+    quotes:"\201C""\201D""\2018""\2019";
+}
+
+blockquote:before {
+    color:#ccc;
+    /*content:open-quote;*/
+    font-size:4em;
+    line-height:.1em;
+    margin-right:.25em;
+    vertical-align:-.4em;
+}
+
+blockquote p {
+    display:inline;
+}
+
+.midbody img {
+    max-width:600px;
+    display:block;
+    margin:4px auto;
+    -webkit-box-shadow: #999 1px 1px 4px;
+    -moz-box-shadow:#999 1px 1px 4px;
+    box-shadow:#999 1px 1px 4px;
+}
+
+.midbody table {
+    min-width:400px;
+    max-width:800px;
+    margin:0 auto;
+}
+
+.midbody table caption {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    font-family:"Times New Roman",Times,serif;
+}
+
+.midbody table tr td {
+    padding-left: 0.4em;
+}
+
+.hblock{
+    white-space: normal; 
+    text-align:justify;
+    margin:0.2em 0em;
+    padding-top:5px;
+    padding-left:20px;
+    padding-bottom:5px;
+    padding-right:5px;
+    background:#636363;
+    color:#BABABA;
+    border-radius:20px;
+    font-size: 16px;
+    font-family:Georgia,"Times New Roman",Times,serif;
+}
+
+.hblock pre {
+    white-space: pre-wrap; /* css-3 */ 
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */ 
+    white-space: -pre-wrap; /* Opera 4-6 */ 
+    white-space: -o-pre-wrap; /* Opera 7 */ 
+}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="shell, bash, Linux, 程序设计">
+        <meta name="description" content="Shell 程序设计教程">
+        <meta name="author" content="Huoty">
+        <title>Shell 中的特殊字符 | Shell 程序设计教程</title>
+        <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+
+        <!-- 实现 Github 风格的语法高亮 -->
+        <link href="css/github.min.css" rel="stylesheet"/>
+        <script src="js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <script src="js/MathJax.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+        </script>
+    </head>
+ <body>
+  <!-- 页面头部 -->
+  <div class="header"> 
+    <h1 id="shell">Shell 程序设计教程</h1>
+  </div>
+  <div class="topnav">
+    <p>
+        «&#160;&#160;<a href="chapter2.html">Shell 变量</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter4.html">Shell 编程中的输入输出命令</a>&#160;&#160;»
+    </p>
+  </div>
+  
+  <!-- 页面主体 -->
+  <div class="midbody">
+  <h2 id="shell_1">
+   Shell 中的特殊字符
+  </h2>
+  <p>
+   Shell 中除使用普通字符外，还使用了一些特殊字符，它们有特定的含义，也有着重要的作用，如通配符、单引号、双引号、管导线等。在使用时应该注意它们表示的意义和作业范围。
+  </p>
+  <h3 id="shell_2">
+   Shell 通配符
+  </h3>
+  <p>
+   通配符用于模式匹配，如果文件名匹配、路径名搜索、字符串查找等。常用的通配符有如下几种：
+  </p>
+  <h4 id="1">
+   1. 星号（*）
+  </h4>
+  <p>
+   它匹配任意个字符串，在搜索文件时经常使用。但应该注意的是，星号不能匹配文件名前的圆点
+   <code>
+    .
+   </code>
+   和路径名中的斜杠
+   <code>
+    /
+   </code>
+   ，所以应用中必须显示。例如，模式 “
+   <em>
+    file” 不能匹配 “.profile”，而需要用 “.
+   </em>
+   file” 才可匹配。
+  </p>
+  <h4 id="2">
+   2. 问号（？）
+  </h4>
+  <p>
+   它匹配任意一个字符。例如，“f？” 可以匹配 f1、fa 等。
+  </p>
+  <h4 id="3">
+   3. 一对方括号（[ ]）
+  </h4>
+  <p>
+   方括号中有一对字符组。其作用是匹配该字符组所限定的任何一个字符。例如，”f[abcd]” 可以匹配 fa、fb、fc、fd，但不能匹配 fab、fabcd 等。方括号中的字符可以由直接给出的字符组成，也可以由表示范围的起始字符、终止字符及中间一个字符（-）组成。例如，“f[a-d]” 与 “f[abcd]” 作用相同。很明显，前者表示方式更便捷。
+  </p>
+  <h4 id="4">
+   4. 感叹号（！）
+  </h4>
+  <p>
+   如果它紧跟在一对方括号的左方括号之后，则表示不包括在方括号中所列出的字符。例如，“f[!a-d].c” 表示以 f 打头、第二个字符不是 a 到 d 的 .c 文件名。
+  </p>
+  <p>
+   在一个表达式中，也可以同时使用上述符号来提高工作效率。这里要特别强调一点，
+   <strong>
+    通配符与正则表达式很相似，使用时应该注意两者的区别，正则表达式比通配符更加强大
+   </strong>
+   。
+  </p>
+  <h3 id="shell_3">
+   Shell 的引号
+  </h3>
+  <p>
+   在 Shell 中引号分为三种：即双引号、单引号和倒引号。
+  </p>
+  <h4 id="1_1">
+   1. 双引号（" "）
+  </h4>
+  <p>
+   由双引号括起来的字符，除$、倒引号和反斜杠（\）仍然保留其特殊功能外，其余字符通常作为普通字符对待。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test3-1.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+echo "My current directory is `pwd`"
+echo "My home the directory is $HOME \n"
+</code></pre>
+  <p>
+   <strong>
+    注意：
+   </strong>
+   双引号一定为英文的双引号（”“），而不能为中文的双引号（“”），本节中所讨论的所有特殊字符都是英文符号。
+  </p>
+  <h4 id="2_1">
+   2. 单引号（' '）
+  </h4>
+  <p>
+   由单引号括起来的所有字符或字符串都作为普通字符出现。如果将上例中的双引号改为单引号，则
+   <code>
+    pwd
+   </code>
+   和 $HOME 就会作为普通字符输出，而失去原有的特殊意义。总结的说就是，被单引号括起来的字符，是什么就输出什么。
+  </p>
+  <h4 id="3_1">
+   3. 倒引号（``）
+  </h4>
+  <p>
+   倒引号括起来的字符串被 Shell 解释为命令行，在执行时，Shell 会先执行该命令行，并以它的标准输出结果取代整个倒引号部分。常用的方式有以下几种：
+  </p>
+  <p>
+   （1）Shell 解释执行
+  </p>
+  <blockquote>
+   <p>
+    $ echo current directory is `pwd` current directory is /home/huoty
+   </p>
+  </blockquote>
+  <p>
+   由上可见，Shell 在执行此命令时，先执行 <code>`pwd`</code> 中的命令 pwd，然后用执行结果取代 pwd 部分，最后输出输出替换后的结果。
+  </p>
+  <p>
+   （2）利用倒引号的 Shell 解释功能可以进行命令替换，即把倒引号中的命令的结果赋给指定变量。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test3-2.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+mypath=`pwd`
+echo My directory is $mypath
+</code></pre>
+  <p>
+   （3）倒引号的嵌套应用，倒引号嵌套时在内层的一组倒引号必须用反斜杠（\）进行转义。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test3-2.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+mypath=`echo My directory is `pwd``
+echo $mypath
+</code></pre>
+  <h3 id="shell_4">
+   Shell 的命令行执行顺序操作符
+  </h3>
+  <p>
+   在之前的示例程序中，我们大都是一行执行一个命令，而事实上，多条命令可以在一行中出现，顺序执行。相邻命令间也可以存在罗辑关系，即 罗辑“与” 和 “或”。
+  </p>
+  <h4 id="1_2">
+   1. 顺序执行
+  </h4>
+  <p>
+   （1）顺序分隔符（;）
+  </p>
+  <p>
+   多条命令可以在多行中输入，也可以将这些命令在一行中输入，但各命令应以分号（;）隔开，例如在本教程中的第一个例子可以用如下方式实现：
+  </p>
+  <blockquote>
+   <p>
+    $ pwd; ls -l ~/.vimrc; cal; who; ifconfig
+   </p>
+  </blockquote>
+  <p>
+   （2）管道线（|）
+  </p>
+  <p>
+   管道的作用是将前边命令的输出作为后边命令的输入。用管道线 “|” 可以将多个简单的命令集合在一起，用以完成较复杂的功能。管道的执行顺序也是顺序执行。例如：
+  </p>
+  <blockquote>
+   <p>
+    $ who | wc -l | write username
+   </p>
+  </blockquote>
+  <p>
+   上例的含义是统计在线人数，并把结果以消息形式发送给 username 用户。
+  </p>
+  <h4 id="2_2">
+   2. 罗辑与（&amp;&amp;）
+  </h4>
+  <p>
+   罗辑与操作符 “&amp;&amp;” 可把两个或两个以上命令联系在一起，格式如下：
+  </p>
+  <blockquote>
+   <p>
+    command1 &amp;&amp; command2 &amp;&amp; … &amp;&amp; commandN
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    功能：
+   </strong>
+   先运行 command1，如果结果运行成功，才运行 command2；否则若 command1 运行不成，则不运行 command2。一次类推，只有前 n-1 个命令都正确运行后，第 n 个命令才运行。示例：
+  </p>
+  <blockquote>
+   <p>
+    $ cp test1 /home/huoty/ &amp;&amp; cat /home/huoty/test1
+   </p>
+  </blockquote>
+  <p>
+   如果成功复制 test1 到要求路径，则查看其内容。
+   <strong>
+    注:
+   </strong>
+   在 Shell 中，命令执行成功返回值为 0， 执行失败返回值为非 0。
+  </p>
+  <h4 id="3_2">
+   3. 罗辑或（||）
+  </h4>
+  <p>
+   罗辑或操作符 “||” 可以把两个或两个以上命令联系起来，其一般格式为：
+  </p>
+  <blockquote>
+   <p>
+    command1 || command2 || … || commandN
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    功能：
+   </strong>
+   先运行 command1，如果运行不成功，则运行 command2；否则若 command1 运行成功，则不运行 command2。示例：
+  </p>
+  <blockquote>
+   <p>
+    cp test1 /home/huoty || ls -l
+   </p>
+  </blockquote>
+  <p>
+   如果没有成功复制 test1 文件到要求路径，则查看当前路径内容。
+  </p>
+  <h3 id="shell_5">
+   Shell 中的注释符，反斜杠及后台操作符
+  </h3>
+  <h4 id="1_3">
+   1. 注释符（#）
+  </h4>
+  <p>
+   在 UNIX/Linux 中，使用 “#” 来进行 Shell 程序的注释。为了让编写的程序更容易让人理解，应该养成在程序中添加注释的好习惯，注释用于描述一组特定命令的用途。
+  </p>
+  <h4 id="2_3">
+   2. 反斜杠（\）
+  </h4>
+  <p>
+   反斜杠（\）是转义字符，它能把特殊字符编程普通字符。例如：
+  </p>
+  <blockquote>
+   <p>
+    echo “Filename is No\$ * n1”
+   </p>
+   <p>
+    Filename is No$ * n1
+   </p>
+  </blockquote>
+  <p>
+   如果想要在字符串中使用反斜杠本身，则必须采用
+   <code>
+    “\\”
+   </code>
+   的形式，其中第一个反斜杠作为转义字符，从而第二个反斜杠变为普通字符。
+  </p>
+  <p>
+   另外，反斜杠还作为续行符使用。如果把它放在一行的回车符换行之前，那么表示下一行接续此行被视为同一行，可以用于表示长的输入行。
+  </p>
+  <h4 id="3_3">
+   3. 后台操作符（&amp;）
+  </h4>
+  <p>
+   有些程序的运行会花很长时间，或者要保持一直运行。这样它们就会一直占着 Shell 终端，而我们也无法做其他的事情。我们可以把进程放到后台去执行，后台运行程序的方法是，再命令后加上后台运行操作符
+   <code>
+    &amp;
+   </code>
+   。利用前后台进程轮流在 CPU 上执行，可以提高工作效率，并且充分地利用了系统资源。例如在编译一个大型 C 程序项目时，如果想要再编译的同时做点别点事情，可以用诸如一下的方式：
+  </p>
+  <blockquote>
+   <p>
+    gcc file1.c &amp;
+   </p>
+  </blockquote>
+  <p>
+   在一条命令最后输入
+   <code>
+    &amp;
+   </code>
+   符号，Shell 就再后台启动该程序，并且马上显示主提示符。用
+   <code>
+    jobs
+   </code>
+   命令可以查看挂起在后台的进程。用
+   <code>
+    fg
+   </code>
+   命令可以将后台挂起的进程恢复到前台来运行。用快捷键
+   <code>
+    Ctrl + Z
+   </code>
+   可以暂时把当前程序挂起到后台，挂起后的进程将不再进行任何操作。
+  </p>
+  </div> <!-- end midbody-->
+
+  <div class="bottomnav">
+        <p>
+        «&#160;&#160;<a href="chapter2.html">Shell 变量</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter4.html">Shell 编程中的输入输出命令</a>&#160;&#160;»
+        </p>
+  </div>
+
+  <div class="footer">
+    Copyright &copy; 2015 <a href="http://kuanghy.github.io/about/">Huoty</a>,
+    Created using <a href="">Github</a>, Version 0.1
+  </div>
+ </body>
+</html>

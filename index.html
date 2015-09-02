@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="shell, bash, Linux, 程序设计">
+        <meta name="description" content="Shell 程序设计教程">
+        <meta name="author" content="Huoty">
+        <title>Shell 程序设计教程</title>
+        <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+    </head>
+ <body>
+  <!-- 页面头部 -->
+  <div class="header"> 
+    <h1 id="shell">Shell 程序设计教程</h1>
+  </div>
+  <div class="topnav">
+    <p>
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter1.html">Shell 概述</a>&#160;&#160;»
+    </p>
+  </div>
+  
+  <!-- 页面主体 -->
+  <div class="midbody">
+  <p>
+   Shell 是 UNIX/Linux 系统中用户与系统交互的接口。它除了作为命令解释器以外，还是一种高级程序设计语言，利用 shell 程序设计语言可以把命令有机地组合在一起，形成功能强大、使用灵活、交互能力强，但代码简单的新命令工具。使用 UNIX/Linux 的用户可以通过编写 shell 程序来设计适合自己的新功能，这样有利于提高用户管理使用 UNIX/Linux 系统的工作效率。
+  </p>
+  <p>
+   本教程只以
+   <code>
+    GNU Bourne-Again Shell
+   </code>
+   （即 bash 的缩写）为例简单地介绍 Shell 脚本程序设计中的语法结构、变量定义及赋值、特殊符号、控制语句等内容，对某些内容不做深入的讲解和研究，如有需要可查阅其他相关资料。
+  </p>
+  <h4 id="_1">
+   本教程的主要内容：
+  </h4><br/>
+  <ul>
+   <li>
+    Shell 的地位和作用，以及各主要版本
+   </li>
+   <li>
+    shell 脚本的建立与执行
+   </li>
+   <li>
+    Shell 的变量及特殊字符
+   </li>
+   <li>
+    Shell 的输入输出命令
+   </li>
+   <li>
+    Shell 程序逻辑结构语句
+   </li>
+  </ul>
+  <h3 id="_2">
+   教程目录
+  </h3><br/>
+  <ul>
+   <li>
+    <a href="chapter1.html">
+     Shell 概述
+    </a>
+    <ul>
+     <li>
+      <a href="chapter1.html#shell_1">
+       Shell 简介
+      </a>
+     </li>
+     <li>
+      <a href="chapter1.html#shell_5">
+       Shell 脚本的建立与执行
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li>
+    <a href="chapter2.html">
+     Shell 变量
+    </a>
+    <ul>
+     <li>
+      <a href="chapter2.html#shell_2">
+       Shell 的环境变量
+      </a>
+     </li>
+     <li>
+      <a href="chapter2.html#shell_3">
+       Shell 的用户自定义变量
+      </a>
+     </li>
+     <li>
+         <a href="chapter2.html#varext">Shell 的变量扩展功能</a>
+     </li>
+     <li>
+         <a href="chapter2.html#array">Shell 定义数组</a>
+     </li>
+    </ul>
+   </li>
+   <li>
+    <a href="chapter3.html">
+     Shell 中的特殊字符
+    </a>
+    <ul>
+     <li>
+      <a href="chapter3.html#shell_2">
+       Shell 通配符
+      </a>
+     </li>
+     <li>
+      <a href="chapter3.html#shell_3">
+       Shell 的引号
+      </a>
+     </li>
+     <li>
+      <a href="chapter3.html#shell_4">
+       Shell 的命令行执行顺序操作符
+      </a>
+     </li>
+     <li>
+      <a href="chapter3.html#shell_5">
+       Shell 中的注释符，反斜杠及后台操作符
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li>
+    <a href="chapter4.html">
+     Shell 编程中的输入输出命令
+    </a>
+    <ul>
+     <li>
+      <a href="chapter4.html#shell_2">
+       Shell 中输入输出的标准文件
+      </a>
+     </li>
+     <li>
+      <a href="chapter4.html#shell_3">
+       Shell 的输入输出重定向命令
+      </a>
+     </li>
+     <li>
+      <a href="chapter4.html#shell_4">
+       Shell 的输入输出命令
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li>
+    <a href="chapter5.html">
+     Shell 程序控制结构语句
+    </a>
+    <ul>
+     <li>
+      <a href="chapter5.html#if">
+       if 语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#_1">
+       测试语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#case">
+       case 语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#for">
+       for 语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#while">
+       while 语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#until">
+       until 语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#break-continue">
+       break 和 continue 语句
+      </a>
+     </li>
+     <li>
+      <a href="chapter5.html#_2">
+       算术表达式和退出脚本程序命令
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li>
+    <a href="chapter6.html">
+     Shell 自定义函数
+    </a>
+   </li>
+   <li>
+    <a href="chapter7.html">
+     Shell 脚本调试方法和文件包含
+    </a>
+    <ul>
+     <li>
+      <a href="chapter7.html#shell_1">
+       Shell 脚本调试方法
+      </a>
+     </li>
+     <li>
+      <a href="chapter7.html#shell_2">
+       Shell 文件包含
+      </a>
+     </li>
+     <li>
+      <a href="chapter7.html#shell_3">
+       Shell 图形界面编程
+      </a>
+     </li>
+    </ul>
+    <li>
+        <a href="exercises.html">思考与实践</a>
+    </li>
+    <li>
+        <a href="example.html">Shell 脚本应用实例</a>
+        <ul>
+            <li>
+                <a href="example.html#_2">一个带回收站的删除命令</a>
+            </li>
+            <li>
+                <a href="example.html#linux-bin">制作 Linux 的 bin 安装文件</a>
+            </li>
+        </ul>
+    </li>
+   </li>
+  </ul>
+  <h3>编者声明</h3>
+  <p>本教程仅供学习参考，禁止用于其他用途，特此声明！</p>
+  </div> <!-- end midbody-->
+
+  <div class="bottomnav">
+        <p>
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter1.html">Shell 概述</a>&#160;&#160;»
+        </p>
+  </div>
+
+  <div class="footer">
+    Copyright &copy; 2015 <a href="http://kuanghy.github.io/about/">Huoty</a>,
+    Created using <a href="">Github</a>, Version 0.1
+  </div>
+ </body>
+</html>

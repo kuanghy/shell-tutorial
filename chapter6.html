@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="shell, bash, Linux, 程序设计">
+        <meta name="description" content="Shell 程序设计教程">
+        <meta name="author" content="Huoty">
+        <title>Shell 自定义函数 | Shell 程序设计教程</title>
+        <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+
+        <!-- 实现 Github 风格的语法高亮 -->
+        <link href="css/github.min.css" rel="stylesheet"/>
+        <script src="js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <script src="js/MathJax.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+        </script>
+    </head>
+ <body>
+  <!-- 页面头部 -->
+  <div class="header"> 
+    <h1 id="shell">Shell 程序设计教程</h1>
+  </div>
+  <div class="topnav">
+    <p>
+        «&#160;&#160;<a href="chapter5.html">Shell 程序控制结构语句</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter7.html">Shell 脚本调试方法和文件包含</a>&#160;&#160;»
+    </p>
+  </div>
+  
+  <!-- 页面主体 -->
+  <div class="midbody">
+  <h2 id="_1">
+   Shell 自定义函数
+  </h2>
+  <p>
+   在 Shell 中可以自定义并使用函数。其定义格式为：
+  </p>
+  <pre><code>Function()
+{
+    command-list
+    [ return-value ]
+}
+</code></pre>
+  <p>
+   函数应先定义，后使用。
+   <strong>
+    调用函数时，直接利用函数名调用
+   </strong>
+   。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test6-1.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+hello()
+{
+    echo "Hello, I am huoty(http://kuanghy.github.io/) !"
+}
+
+hello
+</code></pre>
+  <p>
+   Shell 函数也可以有
+   <strong>
+    返回值
+   </strong>
+   ，但是该返回值只能为整数。我们可以这样来理解函数的返回值，其实函数就相当于一个命令，其返回值用于表示其执行的状态，所以只能为整数。返回值的接受有两种方式：一种是用变量接收，这其实是将标准输出传递给主程序的变量；另一种是用
+   <code>
+    $?
+   </code>
+   接收。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test6-2.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+fun_with_return()
+{
+    echo -n "Your first name: "
+    read fname
+    echo -n "Your last name:"
+    read lname
+    echo "Your name is $fname $lname"
+
+    return 10
+}
+
+fun_with_return
+ret=$?  # or "ret=`fun_with_return`"
+echo "Ret: $ret"
+</code></pre>
+  <p>
+   Shell 函数可以
+   <strong>
+    嵌套调用
+   </strong>
+   ，示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test6-3.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+# Calling one function from another
+number_one () {
+   echo "Url_1 is http://kuanghy.github.io/"
+   number_two
+}
+
+number_two () {
+   echo "Url_2 is http://kuanghy.github.io/about/"
+}
+
+number_one
+</code></pre>
+  <p>
+   在Shell中，调用函数时可以向其传递参数。在函数体内部，通过
+   <mathjax>
+    $n 的形式来获取参数的值，例如，$
+   </mathjax>
+   1表示第一个参数，
+   <mathjax>
+    $2表示第二个参数等等。但需要注意的是， $
+   </mathjax>
+   10 不能获取第十个参数，获取第十个参数需要
+   <mathjax n="n">
+    ${10}。当n&gt;=10时，需要使用$
+   </mathjax>
+   来获取参数。在调用函数传参时，直接在函数名后加上参数即可，各参数间用空格隔开。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test6-4.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+testfile()
+{
+    if [ -d "$1" ]
+    then echo "$1 is a directory."
+    else echo "$1 is not a directory."
+    fi
+    echo "End of the function."
+}
+
+testfile /home/huoty/.vimrc
+</code></pre>
+  <p>
+   另外，还有几个特殊变量用来处理参数：
+   <code>
+    $#
+   </code>
+   传递给函数的参数个数；
+   <code>
+    $*
+   </code>
+   显示所有传递给函数的参数；
+   <code>
+    $?
+   </code>
+   函数的返回值。
+  </p>
+  <p>
+  最后强调一个<b>值得注意的点</b>，Shell 的函数体不能为空，不能出现像如下形式的函数声明：
+  </p>
+  <pre><code>func()
+{
+}</code></pre>
+  <p>或者</p>
+  <pre><code>func()
+{}</code></pre>
+  <p>实际上是 shell 无法识别这样的定义，它不会认为这里的大括号是用于定义函数的。如果你真的需要一个什么都不用做的空函数，那么你可以在函数体中加一个空语句。在 shell 中，可以用 <code>:</code> 来表示空语句，即只消耗 cpu 时间，不做任何实际的工作。那么空函数的实现可以用如下的方式：
+  </p>
+  <pre><code>func()
+{
+  ：
+}</code></pre>
+  </div> <!-- end midbody-->
+
+  <div class="bottomnav">
+        <p>
+        «&#160;&#160;<a href="chapter5.html">Shell 程序控制结构语句</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter7.html">Shell 脚本调试方法和文件包含</a>&#160;&#160;»
+        </p>
+  </div>
+
+  <div class="footer">
+    Copyright &copy; 2015 <a href="http://kuanghy.github.io/about/">Huoty</a>,
+    Created using <a href="">Github</a>, Version 0.1
+  </div>
+ </body>
+</html>
