@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="shell, bash, Linux, 程序设计">
+        <meta name="description" content="Shell 程序设计教程">
+        <meta name="author" content="Huoty">
+        <title>Shell 编程中的输入输出命令 | Shell 程序设计教程</title>
+        <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="css/style.css" type="text/css">
+
+        <!-- 实现 Github 风格的语法高亮 -->
+        <link href="css/github.min.css" rel="stylesheet"/>
+        <script src="js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <script src="js/MathJax.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+        </script>
+    </head>
+ <body>
+  <!-- 页面头部 -->
+  <div class="header"> 
+    <h1 id="shell">Shell 程序设计教程</h1>
+  </div>
+  <div class="topnav">
+    <p>
+        «&#160;&#160;<a href="chapter3.html">Shell 中的特殊字符</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter5.html">Shell 程序控制结构语句</a>&#160;&#160;»
+    </p>
+  </div>
+  
+  <!-- 页面主体 -->
+  <div class="midbody">
+  <h2 id="shell_1">
+   Shell 编程中的输入输出命令
+  </h2>
+  <p>
+   计算机都能执行输入、处理和输出的基本操作过程。而 UNIX/Linux 下的典型命令则包含执行输入输出的的基本操作。
+  </p>
+  <h3 id="shell_2">
+   Shell 中输入输出的标准文件
+  </h3>
+  <p>
+   Linux/UNIX 中每个命令以进程的方式运行，而每个进程运行时自动打开三个文件，这些文件称为命令的标准文件，分别用于命令读取输入、输出结果以及输出错误信息，即标准输入文件（stdin）、标准输出文件（stdout）、标准错误输出文件（stderr）。这些文件与执行命令的终端关联。更明确的说，键盘是标准输入，显示器是标准输出和标准错误输出。因此，默认情况下，每条命令都是从键盘读取输入，并将输出和错误信息发送到显示屏上。通过使用 Linux/UNIX 中文件重定向命令，可以将命令的输入、输出以及错误信息重定向到其他文件中，这就可以将多个命令组合起来，以完成单个命令不能完成的复杂任务。
+  </p>
+  <h3 id="shell_3">
+   Shell 的输入输出重定向命令
+  </h3>
+  <h4 id="1">
+   1. 输入重定向命令
+  </h4>
+  <p>
+   输入重定向是通过使用小于号
+   <code>
+    “&lt;”
+   </code>
+   来实现的。它的作用是解除键盘作为命令 “command” 的标准输入，并将文件 “input-file” 作为命令的输入源。这样，命令 “command” 读取的输入来自文件 “input-file”, 而不是与命令运行终端相连接的键盘。命令被 Shell 解释执行后，输出到显示器 “monitor” 上。如下图所示：
+  </p>
+  <p>
+   <img alt="输入重定向" src="http://ww1.sinaimg.cn/mw690/c3c88275jw1evf6xnq40fj20e3039weq.jpg"/>
+  </p>
+  <p>
+   其使用格式为：
+  </p>
+  <blockquote>
+   <p>
+    command &lt; input-file
+   </p>
+  </blockquote>
+  <h4 id="2">
+   2. 输出重定向命令
+  </h4>
+  <p>
+   输出重定向通过使用大于号
+   <code>
+    “&gt;”
+   </code>
+   来实现。该语法用于将命令 “command” 的输出重定向到文件 “output-file” 上以取代显示屏。如下图所示：
+  </p>
+  <p>
+   <img alt="输出重定向" src="http://ww1.sinaimg.cn/mw690/c3c88275jw1evf6xnhju2j20ee03g3yt.jpg"/>
+  </p>
+  <p>
+   其使用格式为：
+  </p>
+  <blockquote>
+   <p>
+    command &gt; output-file
+   </p>
+  </blockquote>
+  <h4 id="3">
+   3. 输出附加定向命令
+  </h4>
+  <p>
+   输出附加定向命令通过使用两个大于号
+   <code>
+    “&gt;&gt;”
+   </code>
+   来实现。它的作用是把命令（或执行程序）的输出附加到指定文件的后面，文件原有内容不被破坏。其格式为：
+  </p>
+  <blockquote>
+   <p>
+    command &gt;&gt; output-file
+   </p>
+  </blockquote>
+  <h4 id="4">
+   4. 标准错误重定向命令
+  </h4>
+  <p>
+   标准错误重定向使用操作符
+   <code>
+    “2&gt;”
+   </code>
+   ，对命令的错误进行重定向，将产生的错误消息发送到文件中，命令的输入也可以是命令行参数所指定的文件。其一般格式为：
+  </p>
+  <blockquote>
+   <p>
+    command 2&gt; error-file
+   </p>
+  </blockquote>
+  <p>
+   在 Shell 编程的过程中，可以混合的使用输入输出重定向命令，从而实现一些特定复杂的功能。
+  </p>
+  <h3 id="shell_4">
+   Shell 的输入输出命令
+  </h3>
+  <p>
+   Shell 的输入输出命令最常用的两个是
+   <code>
+    read
+   </code>
+   和
+   <code>
+    echo
+   </code>
+   。echo 作为向屏幕输出信息的工具应用比较多，read 主要用于读取用户输入。
+  </p>
+  <h4 id="1-read">
+   1. read 命令
+  </h4>
+  <p>
+   <code>
+    read
+   </code>
+   命令是标准的输入命令，可以利用 read 命令从标准输入读取数据，然后赋值给指定的变量。其一般格式为：
+  </p>
+  <blockquote>
+   <p>
+    read 变量1 [变量2] …
+   </p>
+  </blockquote>
+  <p>
+   利用 read 命令可以交互地为变量赋值。输入数据时，数据间以空格或制表符作为分隔符。若变量个数与给定数据个数相同，则一次对应赋值。若变量个数少于数据个数，则将剩下的数据全部赋给最后一个变量。若变量个数多于给定的数据个数，则多余的变量就被赋值为空串。示例：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test4-1.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+read n1 n2
+# Input: a b &lt;回车&gt;
+
+read na nb
+# Input: First Second Third &lt;回车&gt;
+
+read a b c 
+# Input: 1 2 &lt;回车&gt;
+</code></pre>
+  <h4 id="2-echo">
+   2. echo 命令
+  </h4>
+  <p>
+   <code>
+    echo
+   </code>
+   命令是将其后的参数在标准输出上输出，个参数间以空格隔开，以换行符终止。如果数据间保留对个空格，则要用单引号或双引号把它们括起来，通常，最好用双引号把所有参数括起来，这样不仅易读并且能使 Shell 对它们进行正确的解释。
+  </p>
+  <p>
+   <code>
+    echo
+   </code>
+   参数中有一些特殊字符，用于输出控制或者打印出无法显示的字符，如下表所示：
+  </p>
+  <table border="1">
+   <caption>
+    echo 命令使用的特殊字符
+   </caption>
+   <tr>
+    <th>
+     字符
+    </th>
+    <th>
+     含义
+    </th>
+   </tr>
+   <tr>
+    <td>
+     \b
+    </td>
+    <td>
+     退格
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \c
+    </td>
+    <td>
+     不将光标移动到下一行
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \f
+    </td>
+    <td>
+     换页
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \n
+    </td>
+    <td>
+     换行（光标移到下一行）
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \r
+    </td>
+    <td>
+     回车
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \t
+    </td>
+    <td>
+     水平制表符
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \
+    </td>
+    <td>
+     垂直制表符
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \\
+    </td>
+    <td>
+     转义符
+    </td>
+   </tr>
+   <tr>
+    <td>
+     \ON
+    </td>
+    <td>
+     ASCII码为八进制 N 的字符
+    </td>
+   </tr>
+  </table>
+  <p>
+   下面是一个 read 和 echo 的综合例子：
+  </p>
+  <pre><code>#!/bin/bash
+
+# Filename: test4-2.sh
+# Author: huoty &lt;sudohuoty@163.com&gt;
+# Script starts from here:
+
+echo "Enter input: \c"
+read line
+echo "You entered: $line"
+echo "Enter another line: \c"
+read word1 word2 word3
+echo "the first words is: $word1"
+echo "the second word is: $word2"
+echo "the rest words is: $word3"
+exit 0
+</code></pre>
+  </div> <!-- end midbody-->
+
+  <div class="bottomnav">
+        <p>
+        «&#160;&#160;<a href="chapter3.html">Shell 中的特殊字符</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">首页</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="chapter5.html">Shell 程序控制结构语句</a>&#160;&#160;»
+        </p>
+  </div>
+
+  <div class="footer">
+    Copyright &copy; 2015 <a href="http://kuanghy.github.io/about/">Huoty</a>,
+    Created using <a href="">Github</a>, Version 0.1
+  </div>
+ </body>
+</html>

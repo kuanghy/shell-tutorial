@@ -1,0 +1,318 @@
+## 应用实例
+
+### 一个带回收站的删除命令
+Linux 下如果在命令行用 rm 命令删除文件，这样是不可恢复的。所以 Linux 系统中的 rm 删除 命令是一个很危险的操作，一旦不小心将重要的文件删除，有时候可能会出现灾难性的后果。在这里，我们来实现一个可以将文件删除到回收站的新的删除命令，并支持将文件恢复到原来位置。该命令工具主要实现以下功能：
+
+- 1. 删除文件到回收站（~/.trash/），并支持恢复文件到原位置
+- 2. 删除到回收站中的文件的文件名以`原文件+删除时间`的形式保存，恢复文件时应提供此新的文件名
+- 3. 删除文件时创建删除日志，日志的每一行记录一个文件的新名、原名、删除时间和原位置信息
+- 4. 支持清空回收站，永久删除回收站中文件，删除时给出确认提示
+- 5. 删除大于 2G 文件时可直接删除，也可删除到回收站
+
+其具体实现如下所示：
+
+```
+#!/bin/bash
+
+# Filename: delete.sh  2015.08.31
+# Author: huoty <sudohuoty@163.com>
+# Script starts from here:
+
+#### 定义终端输出文本颜色
+COLOR_RED="\e[31;49m"
+COLOR_GREEN="\e[32;49m"
+COLOR_YELLO="\e[33;49m"
+COLOR_BLUE="\e[34;49m"
+COLOR_MAGENTA="\e[35;49m"
+COLOR_CYAN="\e[36;49m"
+COLOR_WHILE="\033[1m"
+COLOR_RESET="\e[0m"
+
+#### 为程序的首次使用创建回收站
+if [ ! -d ~/.trash ]
+then
+    mkdir -vp ~/.trash
+fi
+
+LOGFILE=".log"
+
+#### 显示程序帮组信息
+usage()
+{
+    echo -e "Usage: delete [options] file1 [file2 file3....]\n"
+    echo -e "delete is a simple command line interface for deleting file to custom trash.\n"
+    echo "Options:"
+    echo "  -d  Empty the trash"
+    echo "  -f  Forced delete file"
+    echo "  -r  Restore the file in the trash"
+    echo "  -l  List the files in the trash"
+    echo "  -p  Print log file"
+    echo "  -h  Show this help message and exit"
+    echo "  -v  Show program's version number and exit"
+}
+
+#### 如果没有提供任何参数
+if [ $# -eq 0 ]
+then 
+    usage
+    exit 0
+fi
+
+#### 判断是否存在定义的参数
+debaroption()
+{
+    if [ $1 = "-d" -o $1 = "-f" -o $1 = "-r" -o $1 = "-l" -o $1 = "-p" -o $1 = "-v" -o $1 = "-h" ]
+    then 
+        return 0
+    else 
+        return 1
+    fi
+}
+
+#### 读取参数并做相应处理
+force=0  # 强制删除标记
+restore=0  # 文件恢复标记
+while getopts "dfrlpvh" opt
+do
+    case $opt in
+        d)  # 清空回收站
+            #if zenity --question --text "Are you sure you want to empty the trash ?"
+            echo -ne "Are you sure you want to empty the trash?[Y/N]:\a"
+            read reply
+            if [ $reply = "y" -o $reply = "Y" ]
+            then
+                for file in `ls -a ~/.trash/`
+                do
+                    if [ $file = "." -o $file = ".." ]
+                    then 
+                        continue
+                    else 
+                        echo "Removing forever ~/.trash/$file"
+                        rm -rf ~/.trash/$file
+                    fi
+                done
+            fi
+            echo "Done."
+            ;;
+        f)  # 强制删除
+            #exec rm -rf "$@"  # exec会以新的进程去代替原来的进程
+            force=1
+            for file in $@
+            do
+                debaroption $file
+                ret=$?
+                if [ $ret -eq 1 ]
+                then 
+                    echo "Removing $file"
+                    rm -rf $file
+                fi
+            done
+            echo "Done."
+            ;;
+        r)  # 恢复文件
+            # 说明：恢复文件时指定的参数应该为带删除日期的新文件名
+            restore=1
+            #if zenity --question --text "Are you sure you want to restore the file ?"
+            echo -ne "Are you sure you want to restore the file?[Y/N]:\a"
+            read reply
+            if [ $reply = "y" -o $reply = "Y" ]
+            then
+                for file in $@
+                do
+                    debaroption $file
+                    ret=$?
+                    if [ $ret -eq 1 ]
+                    then
+                        fullpath="$HOME/.trash/$file"
+                        if [ -f "$fullpath" -o -d "$fullpath" -o -h "$fullpath" -o -p "$fullpath" ]
+                        then
+                            originalpath=$(awk /$file/'{print $4}' "$HOME/.trash/$LOGFILE")
+                            #filenamenow=$(awk /$file/'{print $1}' "$HOME/.trash/$LOGFILE")
+                            filenamebefore=$(awk /$file/'{print $2}' "$HOME/.trash/$LOGFILE")
+                            echo "Restoring $file"
+                            mv -b "$HOME/.trash/$file" "$originalpath"
+                            sed -i "/$file/d" "$HOME/.trash/$LOGFILE"
+                        else
+                            echo -e "${COLOR_RED}There is no file in the trash.$COLOR_RESET"
+                        fi
+                    fi
+                done
+            fi
+            echo "Done."
+            ;;
+        p)  # 打印删除日志文件
+            cat ~/.trash/$LOGFILE
+            ;;
+        l)  # 列出回收站中的所有文件
+            ls -a ~/.trash/
+            ;;
+        v)  # 显示版本号
+            echo "delete v0.9 (c) 2015 by huoty."
+            ;;
+        h)  # 查看帮助
+            usage
+            ;;
+        *)  # 无效参数
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+#### 删除到回收站
+if [ $force -eq 0 -a $restore -eq 0 ]
+then
+    for file in $@
+    do
+        debaroption $file
+        ret=$?
+        if [ $ret -eq 1 ]
+        then
+            now=`date +%Y%m%d%H%M%S`
+            filename="${file##*/}"
+            newfilename="${file##*/}_${now}"
+            mark1=`expr substr $file 1 2`
+            mark2=`expr substr $file 1 1`
+            if [ $mark1 = "./" ]
+            then
+                fullpath="$(pwd)/$filename"
+            elif [ $mark2 = "/" ]
+            then
+                fullpath="$file"
+            else
+                fullpath="$(pwd)/$file"
+            fi
+
+            if [ -f "$fullpath" -o -d "$fullpath" -o -h "$fullpath" -o -p "$fullpath" ]
+            then
+                if [ -f "$file" ] && [ `ls -l $file | awk '{print $5}'` -gt 2147483648 ]
+                then
+                    #if zenity --question --text "$filename size is larger than 2G, will be deleted directly.\nSelect “No” to delete the trash."
+                    echo -ne "$filename size is larger than 2G, will be deleted directly.\nInput 'N' to delete the trash.[Y/N]:\a"
+                    read reply
+                    if [ $reply = "y" -o $reply = "Y" ]
+                    then
+                        echo -n "Removing $fullpath ... "
+                        rm -rf $fullpath
+                        echo "done."
+                    else
+                        echo -n "Deleting $fullpath ... "
+                        mv -f $fullpath ~/.trash/$newfilename
+                        echo $newfilename $filename $now $fullpath >> ~/.trash/$LOGFILE
+                        echo "done."
+                    fi
+                elif [ -d "$file" ] && [ `du -sb $file | awk '{print $1}'` -gt 2147483648 ]
+                then
+                    #if zenity --question --text "The directory:$filename is larger than 2G, will be deleted directly.\nSelect “No” to delete the trash."
+                    echo -ne "The directory:$filename is larger than 2G, will be deleted directly.\nSelect “No” to delete the trash.\a"
+                    read reply
+                    if [ $reply = "y" -o $reply = "Y" ]
+                    then
+                        echo -n "Removing $fullpath ... "
+                        rm -rf $fullpath
+                        echo "done."
+                    else
+                        echo -n "Deleting $fullpath ... "
+                        mv -f $fullpath ~/.trash/$newfilename
+                        echo $newfilename $filename $now $fullpath >> ~/.trash/$LOGFILE
+                        echo "done."
+                    fi
+                else
+                    echo -n "Deleting $fullpath ... "
+                    mv -f $fullpath ~/.trash/$newfilename
+                    echo $newfilename $filename $now $fullpath >> ~/.trash/$LOGFILE
+                    echo "done."
+                fi
+            else
+                echo -e "${COLOR_RED}Could not delete the $fullpath!${COLOR_RESET}"
+            fi
+        fi
+    done
+fi
+
+#### 脚本结束
+exit 0
+```
+
+### 制作 Linux 的 bin 安装文件
+
+Linux常见的安装文件有tar，zip，gz，rpm，deb，bin等格式。这其中有打包或压缩文件包的形式，也有带管理工具的包形式，而 bin 文件则是一类将 shell 脚本和压缩包合并在一起的安装文件。bin 文件不如带管理工具的 rpm，deb 等软件包方便，但它比单纯的压缩包方便得多，你可以将想要的操作通过 shell 脚本来完成。
+
+制作.bin文件的方法很简单，.bin安装文件其实就是sh文件和zip压缩文件或者deb、rpm等其他安装文件的打包形式，用cat将sh文件和压缩包文件连接成一个文件即可。连接命令：
+
+> cat install.sh 安装文件 > myinstall.bin
+
+一下是一个制作 vim 配置文件自动安装的 .bin 文件的示例：
+
+```
+#!/bin/sh
+
+############ 打印描述信息
+echo "\n============================================================\n"
+echo "    本程序所安装的内容为Linux下vim的配置文件，包括vim的一些"
+echo "插件。程序会安装一个.vimrc的配置文件和一个.vim的插件目录到用"
+echo "户主目录下。程序安装完成后，在 .vim/doc 目录下有一个viskey.5"
+echo "的manpage文件，可将此文件移动到 /usr/share/man/zh_CN/man5/ "
+echo "或者/usr/share/man/man5/目录下，然后便可使用 man viskey 命令"
+echo "查看安装本配置后vim的使用方法。本安装程序由HUOTY制作，如有问"
+echo "题，请与我联系，邮箱：sudohuoty@163.com\n"
+echo "                                        HUOTY    2014.07.31 "
+echo "------------------------------------------------------------\n"
+
+echo "是否继续安装？[Y/N]"
+
+read input rdd
+
+case $input in
+    y* | Y*)
+        echo "\n安装开始......\n";;
+    n* | N* | *)
+        echo "\n未能成功安装，安装程序正在退出......\n"
+        exit 0;;
+esac
+
+############ 解压缩包到临时目录
+echo "正在提取安装文件："
+sed -n -e '1,/^exit 0$/!p' $0 > "/tmp/vimpackages.tar.xz" 2>/dev/null
+rm -rf /tmp/vimpackages
+tar Jxvf /tmp/vimpackages.tar.xz -C /tmp
+echo "\n"
+
+############ 移动目录
+echo "正在移动文件......"
+rm -rf ~/.vim
+rm -rf ~/.vimrc
+mv /tmp/vimpackages/vim ~/.vim
+mv /tmp/vimpackages/vimrc ~/.vimrc
+rm -rf /tmp/ctags
+mkdir /tmp/ctags
+mv /tmp/vimpackages/ctags-5.6.tar.gz /tmp/ctags
+mv /tmp/vimpackages/ctags.txt /tmp/ctags/REDME.HY
+
+############ 清理工作
+rm -rf /tmp/vimpackages
+rm -rf /tmp/vimpackages.tar.xz
+
+############ 安装 ctags 插件
+echo "\n"
+echo "#####"
+echo "    安装本配置文件之后，需要 ctags 插件的支持，如果您的系统"
+echo "中没有安装次插件，则需要安装，否则打开vim时可能会报错。本程"
+echo "序已将 ctags 的安装包以及安装方法解压到了 /tmp/ctags 下，您"
+echo "也可以自己安装合适的版本，如果不需要本安装程序提供的ctags安"
+echo "装包，建议您将其删除。\n"
+
+echo "是否删除 ctags 的安装包？[Y/N]"
+read in2 rdd2
+
+case $in2 in
+    y* | Y*)
+        rm -rf /tmp/ctags
+        echo "\n已删除ctags的安装包......\n"
+        echo "\n--------------- 安装完成 ---------------\n";;
+    n* | N* | *)
+        echo "\n--------------- 安装完成 ---------------\n";;
+esac
+
+exit 0
+```
